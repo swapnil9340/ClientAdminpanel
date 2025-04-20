@@ -24,3 +24,24 @@ body {
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
 }
+
+.sidebar-container {
+  transition: all 0.3s ease;
+  background-color: #f8f9fa;
+  min-height: 100vh;
+  overflow-x: hidden;
+  border-right: 1px solid #ddd;
+}
+
+.sidebar-container.collapsed {
+  max-width: 60px;
+  padding: 0.5rem 0.3rem;
+}
+
+.sidebar-container.open {
+  max-width: 220px;
+}
+
+.transition-content {
+  transition: all 0.3s ease;
+}
