@@ -29,7 +29,7 @@ const ProductGrid = () => {
 
   const fetchProducts = () => {
     axios
-      .get('/api/admin')
+      .get('/api/product')
       .then((res) => setItems(res.data))
       .catch((err) => console.error('Error fetching data:', err));
   };
@@ -58,7 +58,7 @@ const ProductGrid = () => {
     if (!confirmDelete) return;
 
     try {
-      await axios.delete(`/api/admin?id=${id}`);
+      await axios.delete(`/api/product?id=${id}`);
       fetchProducts();
     } catch (error) {
       console.error('Error deleting product:', error);
@@ -73,9 +73,9 @@ const ProductGrid = () => {
       };
 
       if (editMode) {
-        await axios.put(`/api/admin?id=${currentProductId}`, payload);
+        await axios.put(`/api/product?id=${currentProductId}`, payload);
       } else {
-        await axios.post('/api/admin', payload);
+        await axios.post('/api/product', payload);
       }
 
       fetchProducts();
