@@ -3,7 +3,7 @@ import { useRouter } from 'next/router';
 
 const ProtectedRoute = ({ children }) => {
   const router = useRouter();
-  const publicRoutes = ['/login', '/register'];
+  const publicRoutes = ['/login'];
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {

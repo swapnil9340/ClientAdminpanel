@@ -16,10 +16,10 @@ export default function LoginForm() {
     });
 
     const data = await res.json();
-
+    console.log(data)
     if (res.ok) {
       localStorage.setItem('adminToken', data.token);
-      router.push('/dashboard');
+      router.push('/');
     } else {
       alert(data.message || 'Login failed');
     }
