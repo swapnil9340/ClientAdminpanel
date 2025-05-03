@@ -8,8 +8,8 @@ const connectDB = async () => {
   }
 
   try {
-    console.log(process.env.MONGO_URI)
-    const conn = await mongoose.connect(process.env.MONGO_URI);
+    // console.log(process.env.MONGO_URI)
+    const conn = await mongoose.connect('mongodb+srv://test:test@inhyma.kq3bptg.mongodb.net/');
     console.log(`MongoDB connected: ${conn.connection.host}`);
   } catch (error) {
     console.error(`MongoDB connection error: ${error.message}`);
