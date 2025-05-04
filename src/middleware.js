@@ -1,7 +1,8 @@
 import { NextResponse } from 'next/server';
 
 export function middleware(req) {
-  const token = req.cookies.get('token')?.value;
+  const token = req.cookies.get('adminToken')?.value;
+  console.log(token , req )
   const { pathname } = req.nextUrl;
 
   if (pathname === '/login' || pathname.startsWith('/_next')) {

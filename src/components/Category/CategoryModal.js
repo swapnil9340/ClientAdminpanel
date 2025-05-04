@@ -24,7 +24,7 @@ export default function CategoryModal({ open, onClose, editMode, category, refre
     if (file instanceof File) formData.append('image', file);
 
     if (editMode) {
-      await axios.put(`/api/category?id=${category._id}`, formData, { headers: {'Content-Type':'multipart/form-data'} });
+      await axios.put(`/api/category/?id=${category._id}`, formData, { headers: {'Content-Type':'multipart/form-data'} });
     } else {
       await axios.post('/api/category', formData, { headers: {'Content-Type':'multipart/form-data'} });
     }

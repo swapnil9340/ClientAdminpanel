@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useRouter } from 'next/router';
-
+import Cookies from 'js-cookie';
 export default function LoginForm() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -16,11 +16,10 @@ export default function LoginForm() {
     });
 
     const data = await res.json();
-    console.log(data)
     if (res.ok) {
-      localStorage.setItem('adminToken', data.token);
+      Cookies.set('adminToken', data.token, { expires: 7, path: '/' })
       router.push('/');
-    } else {
+    } else {  
       alert(data.message || 'Login failed');
     }
   };
