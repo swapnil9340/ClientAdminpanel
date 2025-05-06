@@ -76,8 +76,8 @@ export default async function handler(req, res) {
     const inStockRaw = Array.isArray(fields.inStock) ? fields.inStock[0] : fields.inStock;
     const brandRaw = Array.isArray(fields.brand) ? fields.brand[0] : fields.brand;
     const categoryRaw = Array.isArray(fields.category) ? fields.category[0] : fields.category;
-
-    if (!nameRaw || !modelNoRaw || !priceRaw || !quantityRaw || !brandRaw || !categoryRaw) {
+    const subcategoryRow = Array.isArray(fields.subcategory) ? fields.subcategory[0] : fields.subcategory;
+    if (!nameRaw || !modelNoRaw || !priceRaw || !quantityRaw  || !categoryRaw || !subcategoryRow) {
       return res.status(400).json({ error: 'Missing required fields' });
     }
 
@@ -92,6 +92,7 @@ export default async function handler(req, res) {
     const inStock = inStockRaw === 'true';
     const brand = brandRaw.trim();
     const category = categoryRaw.trim();
+    const subcategory =  subcategoryRow.trim()
 
     // 3) Handle file uploads
     const uploadedImages = [];
@@ -127,6 +128,7 @@ export default async function handler(req, res) {
         inStock,
         brand,
         category,
+        subcategory,
         images: uploadedImages,
       });
 

@@ -16,8 +16,9 @@ const productSchema = new mongoose.Schema({
   sharePrice: { type: Number,  min: 0 },                        // new (optional)
   mode:       { type: String,  trim: true },                    // new (optional)
   inStock:    { type: Boolean, default: true },
-  brand:      { type: String,  required: true, trim: true },
+  brand:      { type: String,  required: false, trim: true },
   category:   { type: String,  required: true, trim: true },
+  subcategory:   { type: String,  required: true, trim: true },
   images:     { type: [imageSchema], default: [] },
   createdAt:  { type: Date,    default: Date.now },
   updatedAt:  { type: Date,    default: Date.now },

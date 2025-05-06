@@ -24,19 +24,19 @@ const Sidebar = ({ isOpen, onToggle }) => {
       </div>
 
       <Nav className="flex-column gap-2">
-        <Nav.Link href="#" className="d-flex align-items-center gap-2">
+        <Nav.Link href="/" className="d-flex align-items-center gap-2">
           <HouseDoor />
-          {isOpen && 'Dashboard'}
+          {isOpen && 'Product'}
         </Nav.Link>
 
-        <Nav.Link href="#" className="d-flex align-items-center gap-2">
+        <Nav.Link href="/category" className="d-flex align-items-center gap-2">
           <Person />
-          {isOpen && 'Profile'}
+          {isOpen && 'Category'}
         </Nav.Link>
 
-        <Nav.Link href="#" className="d-flex align-items-center gap-2">
+        <Nav.Link href="/subcategory" className="d-flex align-items-center gap-2">
           <Gear />
-          {isOpen && 'Settings'}
+          {isOpen && 'SubCategory'}
         </Nav.Link>
 
         <Nav.Link href="#" className="d-flex align-items-center gap-2">

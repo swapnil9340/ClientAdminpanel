@@ -8,6 +8,7 @@ const ProductModal = ({ open, onClose, editMode, product, refresh }) => {
   const [images, setImages] = useState([]);
   const [formChanged, setFormChanged] = useState(false);
   const [categories, setCategories] = useState([]);
+  const [subcategories, setSubCategories] = useState([]);
   const originalProduct = useRef(null);
 
   const {
@@ -25,7 +26,9 @@ const ProductModal = ({ open, onClose, editMode, product, refresh }) => {
     const fetchCategories = async () => {
       try {
         const res = await axios.get('/api/category');
+        const sub = await axios.get('/api/subcategory');
         setCategories(res.data || []);
+        setSubCategories(sub.data || [])
       } catch (err) {
         console.error('Error fetching categories', err);
       }
@@ -57,6 +60,7 @@ const ProductModal = ({ open, onClose, editMode, product, refresh }) => {
         brand: prod.brand,
         category: prod.category,
         inStock: prod.inStock,
+        subcatgeory:prod.subcatgeory
       });
       setImages(prod.images);
     } else {
@@ -72,6 +76,7 @@ const ProductModal = ({ open, onClose, editMode, product, refresh }) => {
             brand: '',
             category: '',
             inStock: '',
+            subcategory:"",
           });
       setImages([]);
       originalProduct.current = null;
@@ -86,7 +91,7 @@ const ProductModal = ({ open, onClose, editMode, product, refresh }) => {
 
       const fields = [
         'name','modelNo','description','price','currency',
-        'quantity','sharePrice','mode','brand','category','inStock'
+        'quantity','sharePrice','mode','brand','category','inStock', 'subcategory'
       ];
       for (let field of fields) {
         const orig = (originalProduct.current[field] ?? '').toString().trim();
@@ -248,28 +253,6 @@ const ProductModal = ({ open, onClose, editMode, product, refresh }) => {
                 </Form.Group>
               </div>
               <div className="col-md-4">
-                <Form.Group controlId="sharePrice">
-                  <Form.Label>Share Price</Form.Label>
-                  <Form.Control type="number" {...register('sharePrice')} />
-                </Form.Group>
-              </div>
-              <div className="col-md-4">
-                <Form.Group controlId="mode">
-                  <Form.Label>Mode</Form.Label>
-                  <Form.Control type="text" {...register('mode')} />
-                </Form.Group>
-              </div>
-            </div>
-
-            {/* Brand, Category Dropdown, In Stock */}
-            <div className="row mb-3">
-              <div className="col-md-4">
-                <Form.Group controlId="brand">
-                  <Form.Label>Brand</Form.Label>
-                  <Form.Control type="text" {...register('brand')} />
-                </Form.Group>
-              </div>
-              <div className="col-md-4">
                 <Form.Group controlId="category">
                   <Form.Label>Category</Form.Label>
                   <Form.Select
@@ -278,7 +261,7 @@ const ProductModal = ({ open, onClose, editMode, product, refresh }) => {
                   >
                     <option value="">Select Category</option>
                     {categories.map((cat) => (
-                      <option key={cat._id} value={cat._id}>
+                      <option key={cat._id} value={cat.name}>
                         {cat.name}
                       </option>
                     ))}
@@ -289,6 +272,85 @@ const ProductModal = ({ open, onClose, editMode, product, refresh }) => {
                 </Form.Group>
               </div>
               <div className="col-md-4">
+                <Form.Group controlId="category">
+                  <Form.Label>SubCategory</Form.Label>
+                  <Form.Select
+                    {...register('subcategory', { required: 'subCategory is required' })}
+                    isInvalid={!!errors.subcategory}
+                  >
+                    <option value="">Select subCategory</option>
+                    {subcategories.map((cat) => (
+                      <option key={cat._id} value={cat.name}>
+                        {cat.name}
+                      </option>
+                    ))}
+                  </Form.Select>
+                  <Form.Control.Feedback type="invalid">
+                    {errors.subcategory?.message}
+                  </Form.Control.Feedback>
+                </Form.Group>
+              </div>
+              {/* <div className="col-md-4">
+                <Form.Group controlId="sharePrice">
+                  <Form.Label>Share Price</Form.Label>
+                  <Form.Control type="number" {...register('sharePrice')} />
+                </Form.Group>
+              </div> */}
+              {/* <div className="col-md-4">
+                <Form.Group controlId="mode">
+                  <Form.Label>Mode</Form.Label>
+                  <Form.Control type="text" {...register('mode')} />
+                </Form.Group>
+              </div> */}
+            </div>
+
+            {/* Brand, Category Dropdown, In Stock */}
+           <div className="row mb-3">
+              {/* <div className="col-md-4">
+                <Form.Group controlId="brand">
+                  <Form.Label>Brand</Form.Label>
+                  <Form.Control type="text" {...register('brand')} />
+                </Form.Group>
+              </div> */}
+              {/* <div className="col-md-4">
+                <Form.Group controlId="category">
+                  <Form.Label>Category</Form.Label>
+                  <Form.Select
+                    {...register('category', { required: 'Category is required' })}
+                    isInvalid={!!errors.category}
+                  >
+                    <option value="">Select Category</option>
+                    {categories.map((cat) => (
+                      <option key={cat._id} value={cat.name}>
+                        {cat.name}
+                      </option>
+                    ))}
+                  </Form.Select>
+                  <Form.Control.Feedback type="invalid">
+                    {errors.category?.message}
+                  </Form.Control.Feedback>
+                </Form.Group>
+              </div>
+              <div className="col-md-4">
+                <Form.Group controlId="category">
+                  <Form.Label>SubCategory</Form.Label>
+                  <Form.Select
+                    {...register('subcategory', { required: 'subCategory is required' })}
+                    isInvalid={!!errors.subcategory}
+                  >
+                    <option value="">Select subCategory</option>
+                    {subcategories.map((cat) => (
+                      <option key={cat._id} value={cat.name}>
+                        {cat.name}
+                      </option>
+                    ))}
+                  </Form.Select>
+                  <Form.Control.Feedback type="invalid">
+                    {errors.subcategory?.message}
+                  </Form.Control.Feedback>
+                </Form.Group>
+              </div> */}
+              {/* <div className="col-md-4">
                 <Form.Group controlId="inStock">
                   <Form.Label>In Stock</Form.Label>
                   <Form.Control
@@ -303,8 +365,8 @@ const ProductModal = ({ open, onClose, editMode, product, refresh }) => {
                     {errors.inStock?.message}
                   </Form.Control.Feedback>
                 </Form.Group>
-              </div>
-            </div>
+              </div> */}
+            </div> 
 
             {/* Images Upload */}
             <div className="mb-3">
