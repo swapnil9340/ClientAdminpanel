@@ -77,6 +77,8 @@ export default async function handler(req, res) {
     const brandRaw = Array.isArray(fields.brand) ? fields.brand[0] : fields.brand;
     const categoryRaw = Array.isArray(fields.category) ? fields.category[0] : fields.category;
     const subcategoryRow = Array.isArray(fields.subcategory) ? fields.subcategory[0] : fields.subcategory;
+    const metaTitleRaw = Array.isArray(fields.metaTitle) ? fields.metaTitle[0] : fields.metaTitle;
+    const metaDescriptionRow = Array.isArray(fields.metaDescription) ? fields.metaDescription[0] : fields.metaDescription;
     if (!nameRaw || !modelNoRaw || !priceRaw || !quantityRaw  || !categoryRaw || !subcategoryRow) {
       return res.status(400).json({ error: 'Missing required fields' });
     }
@@ -93,7 +95,8 @@ export default async function handler(req, res) {
     const brand = brandRaw.trim();
     const category = categoryRaw.trim();
     const subcategory =  subcategoryRow.trim()
-
+    const metaTitle = metaTitleRaw.trim();
+    const metaDescription =  metaDescriptionRow.trim()
     // 3) Handle file uploads
     const uploadedImages = [];
     const fileArray = Array.isArray(files.images) ? files.images : [files.images];
@@ -130,6 +133,8 @@ export default async function handler(req, res) {
         category,
         subcategory,
         images: uploadedImages,
+        metaTitle,
+        metaDescription
       });
 
       await newProduct.save();

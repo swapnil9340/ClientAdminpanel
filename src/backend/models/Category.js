@@ -1,8 +1,10 @@
+// Category model
 import mongoose from 'mongoose';
 
-const categorySchema = new mongoose.Schema({
+const CategorySchema = new mongoose.Schema({
   name: { type: String, required: true },
-  image: { type: String }, // Store Cloudinary URL or local path
-}, { timestamps: true });
+  image: { type: String },
+  subcategory: { type: mongoose.Schema.Types.ObjectId, ref: 'Subcategory' }, // Reference to subcategory model
+});
 
-export default mongoose.models.Category || mongoose.model('Category', categorySchema);
+export default mongoose.models.Category || mongoose.model('Category', CategorySchema);

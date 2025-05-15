@@ -1,34 +1,53 @@
 
+
 import { useEffect, useRef, useState } from 'react';
-import { Modal, Button, TextField } from '@mui/material';
+import { Modal, Button, TextField, Select, MenuItem, InputLabel, FormControl, FormHelperText } from '@mui/material';
 import { useForm, Controller } from 'react-hook-form';
 import axios from 'axios';
 
 export default function CategoryModal({ open, onClose, editMode, category, refresh }) {
   const { control, handleSubmit, reset, formState: { errors } } = useForm();
   const [file, setFile] = useState(null);
+  const [categories, setCategories] = useState([]);
+  const [selectedCategory, setSelectedCategory] = useState('');
 
   useEffect(() => {
-    if (editMode && category) {
-      reset({ name: category.name });
-      setFile(category.image);
-    } else {
-      reset({ name: '' });
-      setFile(null);
+    if (open) {
+      // Fetch all categories for dropdown
+      axios.get('/api/category')
+        .then(res => setCategories(res.data))
+        .catch(err => console.error('Failed to load categories', err));
+
+      if (editMode && category) {
+        reset({ name: category.name });
+        setFile(category.image);
+        setSelectedCategory(category.categoryId || '');
+      } else {
+        reset({ name: '' });
+        setFile(null);
+        setSelectedCategory('');
+      }
     }
   }, [open]);
 
   const onSubmit = async data => {
     const formData = new FormData();
     formData.append('name', data.name);
+    formData.append('category', selectedCategory);
     if (file instanceof File) formData.append('image', file);
 
     if (editMode) {
-      await axios.put(`/api/subcategory/?id=${category._id}`, formData, { headers: {'Content-Type':'multipart/form-data'} });
+      await axios.put(`/api/subcategory/?id=${category._id}`, formData, {
+        headers: { 'Content-Type': 'multipart/form-data' }
+      });
     } else {
-      await axios.post('/api/subcategory', formData, { headers: {'Content-Type':'multipart/form-data'} });
+      await axios.post('/api/subcategory', formData, {
+        headers: { 'Content-Type': 'multipart/form-data' }
+      });
     }
-    refresh(); onClose();
+
+    refresh();
+    onClose();
   };
 
   return (
@@ -38,6 +57,7 @@ export default function CategoryModal({ open, onClose, editMode, category, refre
         background: '#fff', padding: 24, borderRadius: 8, width: 400
       }}>
         <h2>{editMode ? 'Edit Category' : 'Add Category'}</h2>
+
         <Controller
           name="name"
           control={control}
@@ -49,6 +69,21 @@ export default function CategoryModal({ open, onClose, editMode, category, refre
             />
           )}
         />
+
+        <FormControl fullWidth margin="normal" error={!!errors.category}>
+          <InputLabel>Select Category</InputLabel>
+          <Select
+            value={selectedCategory}
+            onChange={e => setSelectedCategory(e.target.value)}
+            label="Select Category"
+          >
+            {categories.map(cat => (
+              <MenuItem key={cat._id} value={cat._id}>{cat.name}</MenuItem>
+            ))}
+          </Select>
+          {errors.category && <FormHelperText>{errors.category.message}</FormHelperText>}
+        </FormControl>
+
         <input
           type="file"
           accept="image/*"
@@ -58,6 +93,7 @@ export default function CategoryModal({ open, onClose, editMode, category, refre
         {file && typeof file === 'string' && (
           <img src={file} alt="cat" style={{ width: 80, height: 80, objectFit: 'cover', display: 'block', marginBottom: 16 }} />
         )}
+
         <Button variant="contained" color="primary" type="submit">
           {editMode ? 'Update' : 'Add'}
         </Button>
@@ -66,3 +102,4 @@ export default function CategoryModal({ open, onClose, editMode, category, refre
     </Modal>
   );
 }
+
