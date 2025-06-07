@@ -63,11 +63,12 @@ export default async function handler(req, res) {
       console.error('Form parse error:', err);
       return res.status(500).json({ error: 'Error parsing form data' });
     }
-
+console.log(fields)
     // 2) Normalize & validate fields
     const nameRaw = Array.isArray(fields.name) ? fields.name[0] : fields.name;
     const modelNoRaw = Array.isArray(fields.modelNo) ? fields.modelNo[0] : fields.modelNo;
     const descriptionRaw = Array.isArray(fields.description) ? fields.description[0] : fields.description;
+    const specificationRaw = Array.isArray(fields.specification) ? fields.specification[0] : fields.specification;
     const priceRaw = Array.isArray(fields.price) ? fields.price[0] : fields.price;
     const currencyRaw = Array.isArray(fields.currency) ? fields.currency[0] : fields.currency;
     const quantityRaw = Array.isArray(fields.quantity) ? fields.quantity[0] : fields.quantity;
@@ -79,14 +80,15 @@ export default async function handler(req, res) {
     const subcategoryRow = Array.isArray(fields.subcategory) ? fields.subcategory[0] : fields.subcategory;
     const metaTitleRaw = Array.isArray(fields.metaTitle) ? fields.metaTitle[0] : fields.metaTitle;
     const metaDescriptionRow = Array.isArray(fields.metaDescription) ? fields.metaDescription[0] : fields.metaDescription;
-    if (!nameRaw || !modelNoRaw || !priceRaw || !quantityRaw  || !categoryRaw || !subcategoryRow) {
+    if (!nameRaw || !modelNoRaw  || !categoryRaw) {
       return res.status(400).json({ error: 'Missing required fields' });
     }
 
     const name = nameRaw.trim();
     const modelNo = modelNoRaw.trim();
     const description = descriptionRaw?.trim() || '';
-    const price = parseFloat(priceRaw);
+    const specification = specificationRaw?.trim() || '';
+    const price = parseFloat(priceRaw) || 0;
     const currency = currencyRaw || 'INR';
     const quantity = parseInt(quantityRaw, 10);
     const sharePrice = sharePriceRaw ? parseFloat(sharePriceRaw) : undefined;
@@ -123,6 +125,7 @@ export default async function handler(req, res) {
         name,
         modelNo,
         description,
+        specification,
         price,
         currency,
         quantity,
@@ -138,6 +141,7 @@ export default async function handler(req, res) {
       });
 
       await newProduct.save();
+      console.log(newProduct)
       return res.status(201).json(newProduct);
     } catch (dbErr) {
       console.error('DB save error:', dbErr);
@@ -167,9 +171,10 @@ export default async function handler(req, res) {
       name: normalize(fields.name),
       modelNo: normalize(fields.modelNo),
       description: normalize(fields.description),
-      price: parseFloat(normalize(fields.price)),
+      specification: normalize(fields.specification),
+      price: parseFloat(normalize(fields.price))|| 0,
       currency: normalize(fields.currency) || 'INR',
-      quantity: parseInt(normalize(fields.quantity), 10),
+      quantity: parseInt(normalize(fields.quantity), 10)||0,
       sharePrice: parseFloat(normalize(fields.sharePrice)) || undefined,
       mode: normalize(fields.mode),
       inStock: normalize(fields.inStock) === 'true',

@@ -78,18 +78,17 @@ const ProductGrid = () => {
               <TableCell><strong>Image</strong></TableCell>
               <TableCell><strong>Name</strong></TableCell>
               <TableCell><strong>Description</strong></TableCell>
-              <TableCell><strong>Price</strong></TableCell>
-              <TableCell><strong>Currency</strong></TableCell>
-              <TableCell><strong>Brand</strong></TableCell>
+              <TableCell><strong>specification</strong></TableCell>
               <TableCell><strong>Category</strong></TableCell>
-              <TableCell><strong>In Stock</strong></TableCell>
               <TableCell align="center"><strong>Actions</strong></TableCell>
             </TableRow>
           </TableHead>
 
           <TableBody>
             {items.map((item) => (
+            // console.log(item)
               <TableRow key={item._id} hover>
+               
                 <TableCell>
                   <Avatar
                     src={item.images?.[0]?.url || '/placeholder.png'}
@@ -109,11 +108,12 @@ const ProductGrid = () => {
                 }}>
                   {item.description}
                 </TableCell>
-                <TableCell>{item.price}</TableCell>
-                <TableCell>{item.currency}</TableCell>
-                <TableCell>{item.brand}</TableCell>
+
+                <TableCell>
+                  {item.specification || "no data"}
+                </TableCell>
+
                 <TableCell>{item.category}</TableCell>
-                <TableCell>{item.inStock ? 'Yes' : 'No'}</TableCell>
                 <TableCell align="center">
                   <Stack direction="row" spacing={1} justifyContent="center">
                     <Tooltip title="Edit">

@@ -44,6 +44,7 @@ const ProductModal = ({ open, onClose, editMode, product, refresh }) => {
 
   // Initialize form AFTER categories/subcategories are ready
   useEffect(() => {
+    console.log(product)
     if (!open || !isDataReady) return;
 
     if (editMode && product) {
@@ -58,6 +59,7 @@ const ProductModal = ({ open, onClose, editMode, product, refresh }) => {
         name: prod.name || '',
         modelNo: prod.modelNo || '',
         description: prod.description || '',
+        specification: prod.specification || '',
         price: prod.price || '',
         currency: prod.currency || 'USD',
         quantity: prod.quantity || '',
@@ -77,6 +79,7 @@ const ProductModal = ({ open, onClose, editMode, product, refresh }) => {
         name: '',
         modelNo: '',
         description: '',
+        specification:'',
         price: '',
         currency: 'USD',
         quantity: '',
@@ -107,7 +110,7 @@ const ProductModal = ({ open, onClose, editMode, product, refresh }) => {
       if (!originalProduct.current) return true;
 
       const fields = [
-        'name', 'modelNo', 'description', 'price', 'currency',
+        'name', 'modelNo', 'description','specification', 'price', 'currency',
         'quantity', 'sharePrice', 'mode', 'brand',
         'category', 'subcategory', 'inStock',
         'metaTitle', 'metaDescription'
@@ -263,9 +266,12 @@ const ProductModal = ({ open, onClose, editMode, product, refresh }) => {
                 <Form.Label>Description</Form.Label>
                 <Form.Control as="textarea" rows={3} {...register('description')} />
               </Form.Group>
-
+              <Form.Group className="mb-3" controlId="description">
+                <Form.Label>specification</Form.Label>
+                <Form.Control as="textarea" rows={3} {...register('specification')} />
+              </Form.Group>
               {/* Price & Quantity & Category */}
-              <div className="row mb-3">
+              {/* <div className="row mb-3">
                 <div className="col-md-4">
                   <Form.Group controlId="price">
                     <Form.Label>Price</Form.Label>
@@ -304,7 +310,7 @@ const ProductModal = ({ open, onClose, editMode, product, refresh }) => {
                     <Form.Control type="text" {...register('currency')} defaultValue="USD" />
                   </Form.Group>
                 </div>
-              </div>
+              </div> */}
 
               {/* Category & Subcategory */}
               <div className="row mb-3">
@@ -327,7 +333,7 @@ const ProductModal = ({ open, onClose, editMode, product, refresh }) => {
                     </Form.Control.Feedback>
                   </Form.Group>
                 </div>
-                <div className="col-md-6">
+                {/* <div className="col-md-6">
                   <Form.Group controlId="subcategory">
                     <Form.Label>Subcategory</Form.Label>
                     <Form.Select
@@ -345,11 +351,11 @@ const ProductModal = ({ open, onClose, editMode, product, refresh }) => {
                       {errors.subcategory?.message}
                     </Form.Control.Feedback>
                   </Form.Group>
-                </div>
+                </div> */}
               </div>
 
               {/* In Stock */}
-              <Form.Group className="mb-3" controlId="inStock">
+              {/* <Form.Group className="mb-3" controlId="inStock">
                 <Form.Label>In Stock</Form.Label>
                 <Form.Control
                   type="text"
@@ -362,7 +368,7 @@ const ProductModal = ({ open, onClose, editMode, product, refresh }) => {
                 <Form.Control.Feedback type="invalid">
                   {errors.inStock?.message}
                 </Form.Control.Feedback>
-              </Form.Group>
+              </Form.Group> */}
 
               {/* Images */}
               <Form.Group controlId="images" className="mb-3">
