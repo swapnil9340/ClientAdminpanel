@@ -34,10 +34,10 @@ const Sidebar = ({ isOpen, onToggle }) => {
           {isOpen && 'Category'}
         </Nav.Link>
 
-        <Nav.Link href="/subcategory" className="d-flex align-items-center gap-2">
+        {/* <Nav.Link href="/subcategory" className="d-flex align-items-center gap-2">
           <Gear />
           {isOpen && 'SubCategory'}
-        </Nav.Link>
+        </Nav.Link> */}
 
         <Nav.Link href="#" className="d-flex align-items-center gap-2">
           <BoxArrowRight />
