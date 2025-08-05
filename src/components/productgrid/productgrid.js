@@ -14,7 +14,8 @@ import {
   Stack,
   Button,
   Tooltip,
-  Avatar
+  Avatar,
+  TextField
 } from '@mui/material';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
@@ -22,6 +23,7 @@ import ProductModal from './ProductModal';
 
 const ProductGrid = () => {
   const [items, setItems] = useState([]);
+  const [searchTerm, setSearchTerm] = useState('');
   const [open, setOpen] = useState(false);
   const [editMode, setEditMode] = useState(false);
   const [currentProduct, setCurrentProduct] = useState(null);
@@ -54,10 +56,23 @@ const ProductGrid = () => {
     }
   };
 
+  const filteredItems = items.filter((item) =>
+    item.name?.toLowerCase().includes(searchTerm.toLowerCase())
+  );
+
   return (
     <Box p={3}>
-      <Stack direction="row" justifyContent="space-between" alignItems="center" mb={3}>
+      <Stack direction="row" justifyContent="space-between" alignItems="center" mb={3} flexWrap="wrap" gap={2}>
         <Typography variant="h4" fontWeight={600}>Product Inventory</Typography>
+
+        <TextField
+          label="Search Products"
+          variant="outlined"
+          size="small"
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
+        />
+
         <Button
           variant="contained"
           color="primary"
@@ -78,17 +93,15 @@ const ProductGrid = () => {
               <TableCell><strong>Image</strong></TableCell>
               <TableCell><strong>Name</strong></TableCell>
               <TableCell><strong>Description</strong></TableCell>
-              <TableCell><strong>specification</strong></TableCell>
+              <TableCell><strong>Specification</strong></TableCell>
               <TableCell><strong>Category</strong></TableCell>
               <TableCell align="center"><strong>Actions</strong></TableCell>
             </TableRow>
           </TableHead>
 
           <TableBody>
-            {items.map((item) => (
-            // console.log(item)
+            {filteredItems.map((item) => (
               <TableRow key={item._id} hover>
-               
                 <TableCell>
                   <Avatar
                     src={item.images?.[0]?.url || '/placeholder.png'}
@@ -108,11 +121,7 @@ const ProductGrid = () => {
                 }}>
                   {item.description}
                 </TableCell>
-
-                <TableCell>
-                  {item.specification || "no data"}
-                </TableCell>
-
+                <TableCell>{item.specification || "no data"}</TableCell>
                 <TableCell>{item.category}</TableCell>
                 <TableCell align="center">
                   <Stack direction="row" spacing={1} justifyContent="center">
@@ -130,10 +139,10 @@ const ProductGrid = () => {
                 </TableCell>
               </TableRow>
             ))}
-            {items.length === 0 && (
+            {filteredItems.length === 0 && (
               <TableRow>
-                <TableCell colSpan={9} align="center">
-                  No data available
+                <TableCell colSpan={6} align="center">
+                  No matching products found
                 </TableCell>
               </TableRow>
             )}
